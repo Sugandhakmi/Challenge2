@@ -1,0 +1,15 @@
+---
+- name: check metadata
+  hosts: 10.10.10.0
+  vars_files:
+    - vars/tenant.yml
+  vars:
+    ansible_connection: winrm
+    ansible_winrm_server_cert_validation: ignore
+  tasks:
+      - name: get metadata of ec2 instance
+        win_shell: Get-EC2InstanceMetadata -Category IdentityDocument
+        register: ec2_metadata
+        
+      - debug:
+          msg: "{{ ec2_metadata.stdout }}"
