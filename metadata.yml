@@ -1,6 +1,6 @@
 ---
 - name: check metadata
-  hosts: 10.10.10.0
+  hosts: 10.10.10.0 #dummy host
   vars_files:
     - vars/tenant.yml
   vars:
@@ -10,6 +10,7 @@
       - name: get metadata of ec2 instance
         win_shell: Get-EC2InstanceMetadata -Category IdentityDocument
         register: ec2_metadata
-        
-      - debug:
-          msg: "{{ ec2_metadata.stdout }}"
+
+      - name: get the value of instance type
+        debug:
+          msg: "{{ (ec2_metadata.stdout | from_json)['instanceType'] }}"
